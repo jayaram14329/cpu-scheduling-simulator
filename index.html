@@ -6,45 +6,46 @@
   <title>CPU Scheduling Simulator // Mission Control</title>
   <style>
     /* ==========================================================================
-       MISSION CONTROL CSS - DEVELOPER TOOL GRADE
+       MISSION CONTROL CSS - MODERN RESILIENT DEVELOPER TOOL WORKBENCH
        Pure CSS. Zero CDNs, zero external fonts or images. 100% offline.
+       Responsive from 400px to 4K. Fully adjustable layout.
        ========================================================================== */
 
     :root {
-      /* System Fonts */
+      /* Typography */
       --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       --font-mono: ui-monospace, SFMono-Regular, "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
 
-      /* Dark Theme (Default) - Graphite / Slate Scale */
-      --bg-root: #0c0e14;
-      --bg-panel: #12151e;
-      --bg-surface: #181d29;
-      --bg-elevated: #202738;
-      --bg-overlay: rgba(12, 14, 20, 0.88);
+      /* Dark Theme (Default) - Precision Slate & Graphite */
+      --bg-root: #0a0d14;
+      --bg-panel: #111520;
+      --bg-surface: #171d2b;
+      --bg-elevated: #1f2638;
+      --bg-overlay: rgba(10, 13, 20, 0.88);
 
-      --border-subtle: #242c3d;
-      --border-strong: #343f57;
+      --border-subtle: #232c3d;
+      --border-strong: #344057;
       --border-active: #00d2ff;
 
       --text-main: #e2e8f0;
-      --text-muted: #8795ab;
-      --text-dim: #556277;
+      --text-muted: #8897ad;
+      --text-dim: #526077;
 
-      /* Single Accent: Precision Cyan / Electric Blue */
+      /* Single Accent: Precision Cyan / Cobalt */
       --accent: #00d2ff;
       --accent-tint: rgba(0, 210, 255, 0.12);
       --accent-border: rgba(0, 210, 255, 0.35);
       --accent-glow: 0 0 16px rgba(0, 210, 255, 0.35);
       --accent-bright: #38e1ff;
 
-      /* Process 6-Step Analogous Ramp (Cyan to Cobalt) */
+      /* Process 6-Step Analogous Ramp */
       --p1: #00f0ff;
       --p2: #00bbf9;
       --p3: #0096c7;
       --p4: #0077b6;
       --p5: #023e8a;
       --p6: #2563eb;
-      --pidle: #333d4d;
+      --pidle: #333f52;
 
       --die-substrate: #131722;
       --die-gold: #c99738;
@@ -60,29 +61,28 @@
     }
 
     body.theme-light {
-      /* Light Theme - Cool Paper Grey Scale */
-      --bg-root: #edf1f7;
+      /* Light Theme - Clean Technical Paper Grey */
+      --bg-root: #eef2f7;
       --bg-panel: #ffffff;
-      --bg-surface: #f7fafc;
+      --bg-surface: #f8fafc;
       --bg-elevated: #e8eef6;
-      --bg-overlay: rgba(237, 241, 247, 0.9);
+      --bg-overlay: rgba(238, 242, 247, 0.92);
 
       --border-subtle: #d0d9e5;
-      --border-strong: #b1c0d4;
+      --border-strong: #b2c1d4;
       --border-active: #0284c7;
 
       --text-main: #0f172a;
       --text-muted: #475569;
       --text-dim: #94a3b8;
 
-      /* Single Accent - Precision Cobalt / Deep Cyan */
+      /* Single Accent - Precision Cobalt */
       --accent: #0284c7;
       --accent-tint: rgba(2, 132, 199, 0.1);
       --accent-border: rgba(2, 132, 199, 0.35);
       --accent-glow: 0 0 14px rgba(2, 132, 199, 0.25);
       --accent-bright: #0369a1;
 
-      /* Process Ramp for Light Mode */
       --p1: #0891b2;
       --p2: #0284c7;
       --p3: #2563eb;
@@ -100,7 +100,7 @@
       --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.15);
     }
 
-    /* Reset & Typography */
+    /* Reset & Base Rules */
     *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
@@ -110,14 +110,12 @@
     html, body {
       width: 100%;
       height: 100%;
-      overflow: hidden;
       background-color: var(--bg-root);
       color: var(--text-main);
       font-family: var(--font-sans);
       font-size: 13px;
       line-height: 1.45;
       -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
     }
 
     input, button, select, textarea {
@@ -147,35 +145,38 @@
       background: var(--text-dim);
     }
 
-    /* App Shell */
+    /* Outer Container */
     .app-shell {
       display: flex;
       flex-direction: column;
-      width: 100vw;
-      height: 100vh;
-      overflow: hidden;
+      min-height: 100vh;
+      background: var(--bg-root);
     }
 
-    /* Top Command Bar */
-    .command-bar {
-      height: 48px;
+    /* Top Command Header */
+    .command-header {
       background: var(--bg-panel);
       border-bottom: 1px solid var(--border-subtle);
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 14px;
-      gap: 12px;
+      flex-direction: column;
+      padding: 8px 14px;
+      gap: 8px;
       z-index: 50;
-      user-select: none;
       flex-shrink: 0;
     }
 
-    .brand-section {
+    .command-header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand-group {
       display: flex;
       align-items: center;
       gap: 10px;
-      min-width: max-content;
     }
 
     .sys-badge {
@@ -184,7 +185,6 @@
       gap: 6px;
       font-family: var(--font-mono);
       font-size: 11px;
-      letter-spacing: 0.05em;
       font-weight: 600;
       color: var(--accent);
       background: var(--accent-tint);
@@ -209,7 +209,7 @@
 
     .brand-title {
       font-weight: 700;
-      font-size: 13px;
+      font-size: 14px;
       letter-spacing: 0.02em;
       color: var(--text-main);
     }
@@ -220,53 +220,58 @@
       font-family: var(--font-mono);
     }
 
-    .algo-selector-wrap {
+    /* Algorithm Selection Tabs */
+    .algo-nav-wrap {
       display: flex;
       align-items: center;
+      gap: 4px;
+      flex-wrap: wrap;
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-sm);
-      padding: 2px;
-      gap: 2px;
+      padding: 3px;
     }
 
-    .algo-btn {
+    .algo-tab-btn {
       background: transparent;
       border: none;
       color: var(--text-muted);
       font-family: var(--font-mono);
-      font-size: 11px;
+      font-size: 11.5px;
       font-weight: 600;
-      padding: 4px 10px;
+      padding: 5px 11px;
       border-radius: var(--radius-sm);
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: all 0.12s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
-    .algo-btn:hover {
+    .algo-tab-btn:hover {
       color: var(--text-main);
       background: var(--bg-elevated);
     }
-    .algo-btn.active {
+    .algo-tab-btn.active {
       color: var(--accent);
       background: var(--accent-tint);
       box-shadow: inset 0 0 0 1px var(--accent-border);
     }
 
-    .quantum-control {
+    .quantum-badge {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       font-family: var(--font-mono);
       font-size: 11px;
       color: var(--text-muted);
-      background: var(--bg-surface);
+      background: var(--bg-panel);
       border: 1px solid var(--border-subtle);
-      padding: 2px 8px;
+      padding: 2px 7px;
       border-radius: var(--radius-sm);
     }
     .quantum-input {
-      width: 36px;
-      background: var(--bg-panel);
+      width: 38px;
+      background: var(--bg-surface);
       border: 1px solid var(--border-strong);
       color: var(--accent);
       font-family: var(--font-mono);
@@ -276,66 +281,75 @@
       padding: 2px 0;
     }
 
-    /* Transport Controls */
-    .transport-bar {
+    /* Transport Controls Toolbar */
+    .command-header-toolbar {
       display: flex;
       align-items: center;
-      gap: 8px;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
-      padding: 3px 8px;
-      border-radius: var(--radius-md);
+      border-radius: var(--radius-sm);
+      padding: 5px 10px;
     }
 
-    .btn-icon {
-      background: transparent;
-      border: 1px solid transparent;
+    .transport-cluster {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .btn-action {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
       color: var(--text-main);
-      width: 26px;
-      height: 26px;
+      height: 28px;
+      padding: 0 9px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      gap: 5px;
       border-radius: var(--radius-sm);
       cursor: pointer;
-      transition: all 0.12s ease;
       font-family: var(--font-mono);
       font-size: 11px;
+      transition: all 0.12s ease;
+      user-select: none;
     }
-    .btn-icon:hover {
+    .btn-action:hover {
       background: var(--bg-elevated);
       border-color: var(--border-strong);
     }
-    .btn-icon:active {
-      transform: scale(0.95);
+    .btn-action:active {
+      transform: scale(0.97);
     }
-    .btn-play {
+
+    .btn-play-hero {
       background: var(--accent-tint);
       border-color: var(--accent-border);
       color: var(--accent);
-      font-weight: 600;
-      padding: 0 12px;
-      width: auto;
-      gap: 6px;
-      font-size: 11px;
+      font-weight: 700;
+      padding: 0 14px;
     }
-    .btn-play:hover {
+    .btn-play-hero:hover {
       background: var(--accent);
       color: var(--bg-root);
       box-shadow: var(--accent-glow);
     }
 
-    .scrubber-wrap {
+    .timeline-scrubber-group {
       display: flex;
       align-items: center;
       gap: 8px;
-      min-width: 140px;
+      min-width: 170px;
     }
 
     .scrubber-slider {
       -webkit-appearance: none;
       appearance: none;
-      width: 110px;
+      width: 115px;
       height: 4px;
       background: var(--border-strong);
       border-radius: 2px;
@@ -353,7 +367,7 @@
       box-shadow: 0 0 6px var(--accent);
     }
 
-    .speed-wrap {
+    .speed-cluster {
       display: flex;
       align-items: center;
       gap: 5px;
@@ -362,7 +376,7 @@
       color: var(--text-muted);
     }
     .speed-slider {
-      width: 55px;
+      width: 50px;
       height: 4px;
       -webkit-appearance: none;
       background: var(--border-strong);
@@ -377,71 +391,44 @@
       background: var(--text-main);
     }
 
-    /* Right Tools */
-    .bar-actions {
+    .aux-tools-cluster {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
+      flex-wrap: wrap;
     }
 
-    .preset-select {
-      background: var(--bg-surface);
+    .preset-dropdown {
+      background: var(--bg-panel);
       border: 1px solid var(--border-subtle);
       color: var(--text-main);
       font-family: var(--font-mono);
       font-size: 11px;
       padding: 4px 8px;
+      height: 28px;
       border-radius: var(--radius-sm);
       cursor: pointer;
       outline: none;
     }
-    .preset-select:focus {
-      border-color: var(--accent);
-    }
 
-    .btn-pill {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      color: var(--text-muted);
-      font-family: var(--font-mono);
-      font-size: 11px;
-      padding: 4px 9px;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      transition: all 0.12s ease;
-    }
-    .btn-pill:hover {
-      background: var(--bg-elevated);
-      color: var(--text-main);
-      border-color: var(--border-strong);
-    }
-    .btn-pill.active {
-      color: var(--accent);
-      border-color: var(--accent);
-    }
-
-    /* Workspace Layout */
-    .workspace {
+    /* Main Workspace */
+    .workspace-layout {
       display: flex;
       flex: 1;
-      height: calc(100vh - 48px - 26px);
-      overflow: hidden;
       position: relative;
+      overflow: hidden;
     }
 
     /* Left Sidebar */
-    .sidebar {
-      width: 310px;
+    .sidebar-panel {
+      width: 320px;
       background: var(--bg-panel);
       border-right: 1px solid var(--border-subtle);
       display: flex;
       flex-direction: column;
       flex-shrink: 0;
-      overflow: hidden;
       user-select: none;
+      transition: width 0.2s ease;
     }
 
     .sidebar-header {
@@ -453,32 +440,22 @@
       background: var(--bg-surface);
     }
 
-    .sidebar-title {
-      font-size: 11px;
+    .direct-heading {
+      font-size: 11.5px;
       font-family: var(--font-mono);
-      font-weight: 600;
-      color: var(--text-muted);
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: 0.03em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    .btn-text-action {
-      background: transparent;
-      border: 1px solid var(--border-subtle);
-      color: var(--accent);
-      font-family: var(--font-mono);
-      font-size: 11px;
-      padding: 2px 7px;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-    }
-    .btn-text-action:hover {
-      background: var(--accent-tint);
-      border-color: var(--accent-border);
-    }
-
-    .process-table-wrap {
+    .process-table-box {
       flex: 1;
       overflow-y: auto;
-      padding: 8px 12px;
+      padding: 10px 12px;
+      max-height: calc(100vh - 250px);
     }
 
     .proc-table {
@@ -489,25 +466,25 @@
     .proc-table th {
       text-align: left;
       font-family: var(--font-mono);
-      font-size: 10px;
+      font-size: 10.5px;
       font-weight: 600;
       color: var(--text-dim);
       padding: 6px 4px;
       border-bottom: 1px solid var(--border-subtle);
     }
     .proc-table td {
-      padding: 4px;
+      padding: 5px 4px;
       border-bottom: 1px solid var(--border-subtle);
     }
 
     .pid-tag {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
       font-family: var(--font-mono);
       font-weight: 700;
       font-size: 11px;
-      padding: 2px 6px;
+      padding: 2px 7px;
       border-radius: var(--radius-sm);
       background: var(--bg-elevated);
     }
@@ -524,7 +501,7 @@
       border: 1px solid var(--border-subtle);
       color: var(--text-main);
       font-family: var(--font-mono);
-      font-size: 11px;
+      font-size: 11.5px;
       padding: 3px 6px;
       border-radius: var(--radius-sm);
       text-align: center;
@@ -549,7 +526,7 @@
       background: rgba(239, 68, 68, 0.1);
     }
 
-    .sidebar-footer {
+    .sidebar-summary-footer {
       padding: 10px 14px;
       background: var(--bg-surface);
       border-top: 1px solid var(--border-subtle);
@@ -558,7 +535,7 @@
       gap: 8px;
     }
 
-    .config-label-row {
+    .summary-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -567,25 +544,38 @@
       color: var(--text-muted);
     }
 
-    /* Main Stage */
-    .main-stage-container {
+    /* Central Stage */
+    .stage-main {
       flex: 1;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
+      overflow-y: auto;
+      overflow-x: hidden;
       background: var(--bg-root);
       position: relative;
     }
 
-    /* Upper Stage: 3D Visual Cards */
-    .stage-upper {
-      flex: 1.15;
+    /* Particle Flow Canvas */
+    .particle-bridge-canvas {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* Stage Visual Cards Grid */
+    .cards-grid-upper {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 12px;
       padding: 12px;
-      min-height: 250px;
-      position: relative;
+    }
+
+    .cards-grid-lower {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 12px;
+      padding: 0 12px 12px 12px;
     }
 
     .viz-card {
@@ -595,12 +585,13 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      position: relative;
       box-shadow: var(--shadow-sm);
+      min-height: 250px;
+      position: relative;
     }
 
     .viz-header {
-      padding: 8px 12px;
+      padding: 9px 14px;
       background: var(--bg-surface);
       border-bottom: 1px solid var(--border-subtle);
       display: flex;
@@ -609,14 +600,14 @@
       user-select: none;
     }
 
-    .viz-title {
+    .viz-badge-status {
       font-family: var(--font-mono);
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      font-size: 10.5px;
+      color: var(--accent);
+      background: var(--accent-tint);
+      border: 1px solid var(--accent-border);
+      padding: 1px 6px;
+      border-radius: var(--radius-sm);
     }
 
     .viz-body {
@@ -626,9 +617,10 @@
       align-items: center;
       justify-content: center;
       overflow: hidden;
+      padding: 10px;
     }
 
-    /* 3D CPU Die */
+    /* 3D Silicon CPU Die */
     .die-stage {
       perspective: 900px;
       width: 100%;
@@ -638,11 +630,12 @@
       justify-content: center;
       transform-style: preserve-3d;
       cursor: grab;
+      min-height: 200px;
     }
 
     .cpu-die-mesh {
-      width: 190px;
-      height: 190px;
+      width: 180px;
+      height: 180px;
       background: var(--die-substrate);
       border: 2px solid var(--die-trace);
       border-radius: 12px;
@@ -695,8 +688,8 @@
 
     .core-ring {
       position: absolute;
-      width: 84px;
-      height: 84px;
+      width: 80px;
+      height: 80px;
       border: 1px dashed var(--accent-border);
       border-top-color: var(--accent);
       border-radius: 50%;
@@ -748,12 +741,13 @@
       justify-content: center;
       transform-style: preserve-3d;
       position: relative;
+      min-height: 200px;
     }
 
     .queue-3d-cards {
       position: relative;
-      width: 150px;
-      height: 90px;
+      width: 160px;
+      height: 95px;
       transform-style: preserve-3d;
       transform: rotateX(25deg) rotateY(-20deg);
     }
@@ -809,7 +803,7 @@
       transition: width 0.15s ease;
     }
 
-    /* MLFQ 3-Lane View */
+    /* MLFQ Multi-Lane View */
     .mlfq-container {
       width: 100%;
       height: 100%;
@@ -837,7 +831,7 @@
     }
 
     .mlfq-lane-label {
-      width: 70px;
+      width: 80px;
       font-family: var(--font-mono);
       font-size: 10px;
       font-weight: 700;
@@ -858,7 +852,7 @@
     .mlfq-token {
       background: var(--bg-panel);
       border: 1px solid var(--border-strong);
-      padding: 3px 8px;
+      padding: 4px 8px;
       border-radius: var(--radius-sm);
       font-family: var(--font-mono);
       font-size: 11px;
@@ -869,42 +863,8 @@
       gap: 5px;
       transition: transform 0.2s ease, opacity 0.2s ease;
     }
-    .mlfq-token.demoted {
-      animation: demoteFall 0.35s ease-out;
-    }
-    .mlfq-token.boosted {
-      animation: boostRise 0.35s ease-out;
-      border-color: var(--accent);
-    }
 
-    @keyframes demoteFall {
-      from { transform: translateY(-12px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-    @keyframes boostRise {
-      from { transform: translateY(12px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-
-    /* Particle Flow Bridge Canvas */
-    .particle-bridge-canvas {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      z-index: 10;
-    }
-
-    /* Lower Stage: 3D Gantt & Heuristics */
-    .stage-lower {
-      flex: 1.1;
-      display: grid;
-      grid-template-columns: 1.4fr 1fr;
-      gap: 10px;
-      padding: 0 12px 10px 12px;
-      min-height: 200px;
-      overflow: hidden;
-    }
-
+    /* Gantt Schedule Timeline */
     .gantt-viewport {
       width: 100%;
       height: 100%;
@@ -912,8 +872,9 @@
       overflow-y: hidden;
       display: flex;
       align-items: center;
-      padding: 10px 20px;
+      padding: 14px 20px;
       position: relative;
+      min-height: 180px;
     }
 
     .gantt-track-3d {
@@ -943,7 +904,6 @@
       pointer-events: none;
     }
 
-    /* 3D Extruded Blocks (Height = Burst in 3D Mode) */
     .gantt-block-3d {
       position: relative;
       transform-style: preserve-3d;
@@ -1033,35 +993,30 @@
       clip-path: polygon(50% 100%, 0 0, 100% 0);
     }
 
-    /* Live Canvas Charts */
+    /* Live Performance Charts */
     .charts-container {
       width: 100%;
       height: 100%;
       display: flex;
       flex-direction: column;
       padding: 10px 14px;
-      gap: 8px;
+      gap: 12px;
+      min-height: 200px;
     }
 
-    .sparkline-box {
+    .sparkline-box, .bar-race-box {
       flex: 1;
       display: flex;
       flex-direction: column;
       gap: 4px;
-    }
-
-    .bar-race-box {
-      flex: 1.2;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
+      min-height: 80px;
     }
 
     .chart-label-row {
       display: flex;
       justify-content: space-between;
       font-family: var(--font-mono);
-      font-size: 10px;
+      font-size: 10.5px;
       color: var(--text-dim);
       font-weight: 600;
     }
@@ -1070,21 +1025,41 @@
       width: 100%;
       height: 100%;
       display: block;
+      min-height: 70px;
     }
 
-    /* Bottom Dock Tabs */
+    /* Adjustable Bottom Dock */
     .bottom-dock {
-      height: 240px;
       background: var(--bg-panel);
-      border-top: 1px solid var(--border-subtle);
+      border-top: 2px solid var(--border-subtle);
       display: flex;
       flex-direction: column;
       flex-shrink: 0;
       z-index: 40;
+      height: 290px;
+      min-height: 140px;
+      max-height: 70vh;
+      position: relative;
+    }
+
+    /* Draggable Splitter Bar */
+    .dock-resizer {
+      height: 6px;
+      background: transparent;
+      cursor: row-resize;
+      position: absolute;
+      top: -3px;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      transition: background 0.15s ease;
+    }
+    .dock-resizer:hover, .dock-resizer.dragging {
+      background: var(--accent);
     }
 
     .dock-tabs-bar {
-      height: 32px;
+      height: 36px;
       background: var(--bg-surface);
       border-bottom: 1px solid var(--border-subtle);
       display: flex;
@@ -1092,11 +1067,13 @@
       justify-content: space-between;
       padding: 0 12px;
       user-select: none;
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
     .dock-tabs-group {
       display: flex;
-      gap: 2px;
+      gap: 4px;
     }
 
     .dock-tab-btn {
@@ -1104,12 +1081,15 @@
       border: none;
       color: var(--text-muted);
       font-family: var(--font-mono);
-      font-size: 11px;
+      font-size: 11.5px;
       font-weight: 600;
-      padding: 6px 12px;
+      padding: 7px 14px;
       cursor: pointer;
       border-bottom: 2px solid transparent;
       transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
     .dock-tab-btn:hover {
       color: var(--text-main);
@@ -1120,16 +1100,30 @@
       background: var(--accent-tint);
     }
 
-    .dock-tools-group {
+    .dock-size-controls {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
+    }
+    .btn-dock-size {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+    }
+    .btn-dock-size:hover {
+      color: var(--text-main);
+      border-color: var(--border-strong);
     }
 
     .dock-content {
       flex: 1;
       overflow-y: auto;
-      padding: 12px 14px;
+      padding: 12px 16px;
       position: relative;
     }
 
@@ -1142,14 +1136,14 @@
     .metrics-grid-table th {
       text-align: left;
       font-family: var(--font-mono);
-      font-size: 10px;
+      font-size: 10.5px;
       font-weight: 600;
       color: var(--text-dim);
-      padding: 6px 8px;
+      padding: 7px 8px;
       border-bottom: 1px solid var(--border-subtle);
     }
     .metrics-grid-table td {
-      padding: 6px 8px;
+      padding: 7px 8px;
       border-bottom: 1px solid var(--border-subtle);
       font-family: var(--font-mono);
       font-variant-numeric: tabular-nums;
@@ -1178,7 +1172,7 @@
 
     .summary-metrics-bar {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
       gap: 10px;
       margin-top: 14px;
       padding-top: 12px;
@@ -1212,10 +1206,12 @@
       align-items: center;
       margin-bottom: 8px;
       gap: 8px;
+      flex-wrap: wrap;
     }
     .log-filter-group {
       display: flex;
       gap: 4px;
+      flex-wrap: wrap;
     }
     .log-filter-btn {
       background: var(--bg-surface);
@@ -1256,7 +1252,7 @@
       display: flex;
       align-items: baseline;
       gap: 8px;
-      padding: 4px 6px;
+      padding: 5px 8px;
       border-radius: var(--radius-sm);
       border-left: 2px solid transparent;
       background: var(--bg-surface);
@@ -1373,18 +1369,20 @@
 
     /* Status Bar */
     .status-bar {
-      height: 26px;
+      height: 28px;
       background: var(--bg-panel);
       border-top: 1px solid var(--border-subtle);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 12px;
+      padding: 0 14px;
       font-family: var(--font-mono);
       font-size: 11px;
       color: var(--text-muted);
       user-select: none;
       flex-shrink: 0;
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
     .status-items {
@@ -1476,7 +1474,7 @@
       color: var(--text-dim);
     }
 
-    /* Prefers Reduced Motion */
+    /* Motion reduction */
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
         animation-duration: 0.01ms !important;
@@ -1488,42 +1486,28 @@
       }
     }
 
-    /* Responsive Queries */
-    @media (max-width: 960px) {
-      .workspace {
-        flex-direction: column;
-        height: auto;
-        overflow-y: auto;
-      }
-      .sidebar {
-        width: 100%;
-        max-height: 220px;
-      }
-      .stage-upper {
+    /* Responsive Adjustments */
+    @media (max-width: 1024px) {
+      .cards-grid-lower {
         grid-template-columns: 1fr;
-      }
-      .stage-lower {
-        grid-template-columns: 1fr;
-      }
-      .summary-metrics-bar {
-        grid-template-columns: repeat(2, 1fr);
       }
     }
 
-    @media (max-width: 550px) {
-      .command-bar {
+    @media (max-width: 860px) {
+      .workspace-layout {
+        flex-direction: column;
+        overflow-y: auto;
+      }
+      .sidebar-panel {
+        width: 100%;
+        max-height: 240px;
+      }
+      .cards-grid-upper {
+        grid-template-columns: 1fr;
+      }
+      .bottom-dock {
         height: auto;
-        flex-wrap: wrap;
-        padding: 8px;
-      }
-      .algo-selector-wrap {
-        order: 2;
-        width: 100%;
-        justify-content: center;
-      }
-      .transport-bar {
-        width: 100%;
-        justify-content: space-between;
+        max-height: none;
       }
     }
   </style>
@@ -1531,76 +1515,78 @@
 <body>
 
 <div class="app-shell" id="appShell">
-  <!-- Top Command Bar -->
-  <header class="command-bar" role="toolbar" aria-label="Simulation Command Bar">
-    <div class="brand-section">
-      <span class="sys-badge"><span class="sys-led"></span>RTOS: Active</span>
-      <span class="brand-title">CPU Scheduler</span>
-      <span class="brand-sub">// Mission Control</span>
-    </div>
-
-    <!-- Algorithm Selector -->
-    <div class="algo-selector-wrap" id="algoTabs">
-      <button class="algo-btn active" data-algo="FCFS">FCFS</button>
-      <button class="algo-btn" data-algo="SJF">SJF</button>
-      <button class="algo-btn" data-algo="SRTF">SRTF</button>
-      <button class="algo-btn" data-algo="RR">RR</button>
-      <button class="algo-btn" data-algo="MLFQ">MLFQ</button>
-    </div>
-
-    <!-- Quantum Control (RR & MLFQ) -->
-    <div class="quantum-control" id="quantumControl" style="display: none;">
-      <span>Quantum:</span>
-      <input type="number" id="quantumInput" class="quantum-input" min="1" max="20" value="2" title="Time quantum">
-    </div>
-
-    <!-- Transport Playback Controls -->
-    <div class="transport-bar">
-      <button class="btn-icon" id="btnReset" title="Reset simulation (R)">|&lt;</button>
-      <button class="btn-icon" id="btnStepBack" title="Step backward (Left Arrow)">&lt;</button>
-      <button class="btn-icon btn-play" id="btnPlayPause" title="Play / Pause (Spacebar)">
-        <span id="playIcon">&#9654;</span> <span id="playText">Run</span>
-      </button>
-      <button class="btn-icon" id="btnStepFwd" title="Step forward (Right Arrow)">&gt;</button>
-      <button class="btn-icon" id="btnFinish" title="Finish run (F)">&gt;|</button>
-
-      <div class="scrubber-wrap">
-        <input type="range" id="scrubberSlider" class="scrubber-slider" min="0" max="0" value="0">
-        <span class="tabular-mono" id="scrubberLabel" style="font-size: 11px; color: var(--text-dim); min-width: 44px;">0/0</span>
+  <!-- Top Command Header with Neat Non-Overlapping Spacing -->
+  <header class="command-header" role="toolbar" aria-label="Simulation Command Bar">
+    <div class="command-header-top">
+      <div class="brand-group">
+        <span class="sys-badge"><span class="sys-led"></span>RTOS: Active</span>
+        <span class="brand-title">CPU Scheduler</span>
+        <span class="brand-sub">// Mission Control</span>
       </div>
 
-      <div class="speed-wrap">
-        <span>Spd:</span>
-        <input type="range" id="speedSlider" class="speed-slider" min="0.25" max="4" step="0.25" value="1">
-        <span id="speedLabel" class="tabular-mono">1.0x</span>
+      <!-- Algorithm Tabs with Direct Headings -->
+      <div class="algo-nav-wrap" id="algoTabs">
+        <button class="algo-tab-btn active" data-algo="FCFS">FCFS</button>
+        <button class="algo-tab-btn" data-algo="SJF">SJF</button>
+        <button class="algo-tab-btn" data-algo="SRTF">SRTF</button>
+        <button class="algo-tab-btn" data-algo="RR">Round Robin</button>
+        <button class="algo-tab-btn" data-algo="MLFQ">MLFQ</button>
+
+        <div class="quantum-badge" id="quantumControl" style="display: none;">
+          <span>Quantum:</span>
+          <input type="number" id="quantumInput" class="quantum-input" min="1" max="20" value="2" title="Time quantum">
+        </div>
       </div>
     </div>
 
-    <!-- Actions & Modals -->
-    <div class="bar-actions">
-      <select id="presetSelect" class="preset-select" aria-label="Load Workload Preset">
-        <option value="standard">Preset: Standard mix</option>
-        <option value="convoy">Preset: Convoy effect</option>
-        <option value="mlfq">Preset: MLFQ demotion</option>
-        <option value="random">Preset: Random load</option>
-      </select>
+    <!-- Transport Toolbar -->
+    <div class="command-header-toolbar">
+      <div class="transport-cluster">
+        <button class="btn-action" id="btnReset" title="Reset simulation (R)">|&lt; Reset</button>
+        <button class="btn-action" id="btnStepBack" title="Step backward (Left Arrow)">&lt; Step</button>
+        <button class="btn-action btn-play-hero" id="btnPlayPause" title="Play / Pause (Spacebar)">
+          <span id="playIcon">&#9654;</span> <span id="playText">Run</span>
+        </button>
+        <button class="btn-action" id="btnStepFwd" title="Step forward (Right Arrow)">Step &gt;</button>
+        <button class="btn-action" id="btnFinish" title="Finish run (F)">Finish &gt;|</button>
 
-      <button class="btn-pill" id="btnToggle3D" title="Toggle 3D perspective">3D</button>
-      <button class="btn-pill" id="btnToggleTheme" title="Toggle light/dark theme">Theme</button>
-      <button class="btn-pill" id="btnCommandPalette" title="Open Command Palette (Ctrl+K)">Ctrl+K</button>
+        <div class="timeline-scrubber-group">
+          <input type="range" id="scrubberSlider" class="scrubber-slider" min="0" max="0" value="0">
+          <span class="tabular-mono" id="scrubberLabel" style="font-size: 11px; color: var(--text-dim); min-width: 44px;">0/0</span>
+        </div>
+
+        <div class="speed-cluster">
+          <span>Speed:</span>
+          <input type="range" id="speedSlider" class="speed-slider" min="0.25" max="4" step="0.25" value="1">
+          <span id="speedLabel" class="tabular-mono">1.0x</span>
+        </div>
+      </div>
+
+      <div class="aux-tools-cluster">
+        <select id="presetSelect" class="preset-dropdown" aria-label="Load Workload Preset">
+          <option value="standard">Preset: Standard mix</option>
+          <option value="convoy">Preset: Convoy effect</option>
+          <option value="mlfq">Preset: MLFQ demotion</option>
+          <option value="random">Preset: Random load</option>
+        </select>
+
+        <button class="btn-action" id="btnToggle3D" title="Toggle 3D perspective">3D View</button>
+        <button class="btn-action" id="btnToggleTheme" title="Toggle light/dark theme">Theme</button>
+        <button class="btn-action" id="btnCommandPalette" title="Open Command Palette (Ctrl+K)">Ctrl+K</button>
+      </div>
     </div>
   </header>
 
-  <!-- Main Workspace -->
-  <div class="workspace">
+  <!-- Workspace Layout -->
+  <div class="workspace-layout">
     <!-- Left Sidebar: Process Workload -->
-    <aside class="sidebar">
+    <aside class="sidebar-panel">
       <div class="sidebar-header">
-        <span class="sidebar-title">Workload registry</span>
-        <button class="btn-text-action" id="btnAddProcess">+ Add process</button>
+        <span class="direct-heading">Process Workload</span>
+        <button class="btn-action" id="btnAddProcess" style="height: 24px; padding: 0 7px; color: var(--accent);">+ Add process</button>
       </div>
 
-      <div class="process-table-wrap">
+      <div class="process-table-box">
         <table class="proc-table" id="processTable">
           <thead>
             <tr>
@@ -1616,34 +1602,33 @@
         </table>
       </div>
 
-      <div class="sidebar-footer">
-        <div class="config-label-row">
-          <span>Algorithm</span>
+      <div class="sidebar-summary-footer">
+        <div class="summary-row">
+          <span>Selected Algorithm</span>
           <span id="algoSpecName" style="color: var(--accent); font-weight: 600;">FCFS (Non-preemptive)</span>
         </div>
-        <div class="config-label-row" id="agingSpecRow" style="display: none;">
-          <span>Aging boost</span>
-          <span style="color: var(--text-main);">10 Ticks threshold</span>
+        <div class="summary-row" id="agingSpecRow" style="display: none;">
+          <span>Starvation Prevention</span>
+          <span style="color: var(--text-main);">10 Ticks Aging Boost</span>
         </div>
-        <div class="config-label-row">
-          <span>Total burst</span>
+        <div class="summary-row">
+          <span>Total Workload</span>
           <span id="totalBurstVal" class="tabular-mono" style="color: var(--text-main);">22 Ticks</span>
         </div>
       </div>
     </aside>
 
-    <!-- Center Stage -->
-    <main class="main-stage-container" id="stageContainer">
-      <!-- Particle Flow Canvas Overlay -->
+    <!-- Central Visual Stage -->
+    <main class="stage-main" id="stageContainer">
       <canvas id="particleCanvas" class="particle-bridge-canvas"></canvas>
 
-      <!-- Upper Stage: 3D CPU Die & 3D Ready Queue -->
-      <section class="stage-upper">
+      <!-- Upper Visual Cards: CPU Die & Ready Queue -->
+      <section class="cards-grid-upper">
         <!-- 3D CPU Die Card -->
-        <div class="viz-card" id="cpuCard">
+        <div class="viz-card">
           <div class="viz-header">
-            <span class="viz-title">Silicon die core // 3D</span>
-            <span id="coreFreqBadge" class="tabular-mono" style="font-size: 10px; color: var(--accent);">Core 0: Active</span>
+            <span class="direct-heading">CPU Core Execution</span>
+            <span id="coreFreqBadge" class="viz-badge-status">Core 0: Active</span>
           </div>
           <div class="viz-body">
             <div class="die-stage" id="dieStage">
@@ -1660,31 +1645,29 @@
           </div>
         </div>
 
-        <!-- 3D Ready Queue / MLFQ Card -->
-        <div class="viz-card" id="queueCard">
+        <!-- Ready Queue / MLFQ Card -->
+        <div class="viz-card">
           <div class="viz-header">
-            <span class="viz-title" id="queueCardTitle">Ready queue // Z-Stack</span>
-            <span id="queueCountBadge" class="tabular-mono" style="font-size: 10px; color: var(--text-dim);">0 in queue</span>
+            <span class="direct-heading" id="queueCardTitle">Ready Queue</span>
+            <span id="queueCountBadge" class="viz-badge-status">0 in queue</span>
           </div>
-          <div class="viz-body" id="queueBody">
-            <!-- Normal 3D Stack -->
+          <div class="viz-body">
             <div class="queue-stage" id="normalQueueStage">
               <div class="queue-3d-cards" id="queue3dCards">
-                <!-- Stacked cards rendered here -->
+                <!-- 3D stacked cards -->
               </div>
             </div>
-            <!-- MLFQ 3-Lane View -->
             <div class="mlfq-container" id="mlfqContainer" style="display: none;">
               <div class="mlfq-lane" id="laneQ0">
-                <div class="mlfq-lane-label">Q0 [q=2]</div>
+                <div class="mlfq-lane-label">Tier 0 [q=2]</div>
                 <div class="mlfq-lane-tokens" id="tokensQ0"></div>
               </div>
               <div class="mlfq-lane" id="laneQ1">
-                <div class="mlfq-lane-label">Q1 [q=4]</div>
+                <div class="mlfq-lane-label">Tier 1 [q=4]</div>
                 <div class="mlfq-lane-tokens" id="tokensQ1"></div>
               </div>
               <div class="mlfq-lane" id="laneQ2">
-                <div class="mlfq-lane-label">Q2 [FCFS]</div>
+                <div class="mlfq-lane-label">Tier 2 [FCFS]</div>
                 <div class="mlfq-lane-tokens" id="tokensQ2"></div>
               </div>
             </div>
@@ -1692,36 +1675,33 @@
         </div>
       </section>
 
-      <!-- Lower Stage: 3D Gantt & Live Canvas Charts -->
-      <section class="stage-lower">
-        <!-- 3D / 2D Extruded Gantt View -->
+      <!-- Lower Visual Cards: Gantt Timeline & Performance Charts -->
+      <section class="cards-grid-lower">
         <div class="viz-card">
           <div class="viz-header">
-            <span class="viz-title">Gantt schedule timeline</span>
-            <span style="font-size: 10px; color: var(--text-dim);">Click block to scrub</span>
+            <span class="direct-heading">Gantt Timeline</span>
+            <span style="font-size: 10.5px; color: var(--text-dim); font-family: var(--font-mono);">Click block to jump</span>
           </div>
           <div class="viz-body">
             <div class="gantt-viewport" id="ganttViewport">
               <div class="gantt-track-3d mode-isometric" id="ganttTrack">
                 <div class="gantt-floor-grid"></div>
                 <div class="g-playhead" id="ganttPlayhead" style="left: 0px;"></div>
-                <!-- Extruded blocks placed dynamically -->
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Live Canvas Charts -->
         <div class="viz-card">
           <div class="viz-header">
-            <span class="viz-title">Real-time heuristics</span>
-            <span id="heuristicsTick" class="tabular-mono" style="font-size: 10px; color: var(--accent);">Tick: 0</span>
+            <span class="direct-heading">Performance Charts</span>
+            <span id="heuristicsTick" class="viz-badge-status">Tick: 0</span>
           </div>
           <div class="viz-body">
             <div class="charts-container">
               <div class="sparkline-box">
                 <div class="chart-label-row">
-                  <span>CPU utilization history</span>
+                  <span>CPU Utilization</span>
                   <span id="sparklineVal" class="tabular-mono">100.0%</span>
                 </div>
                 <canvas id="sparklineCanvas" class="canvas-chart"></canvas>
@@ -1729,7 +1709,7 @@
 
               <div class="bar-race-box">
                 <div class="chart-label-row">
-                  <span>Algorithm benchmark (Avg WT)</span>
+                  <span>Algorithm Benchmark (Avg WT)</span>
                   <span id="bestAlgoVal" class="tabular-mono" style="color: var(--accent);">SRTF Optimal</span>
                 </div>
                 <canvas id="barRaceCanvas" class="canvas-chart"></canvas>
@@ -1741,23 +1721,29 @@
     </main>
   </div>
 
-  <!-- Bottom Dock Tabs -->
-  <footer class="bottom-dock">
+  <!-- Adjustable Bottom Dock with Resizer -->
+  <footer class="bottom-dock" id="bottomDock">
+    <!-- Draggable resizer splitter -->
+    <div class="dock-resizer" id="dockResizer" title="Drag to adjust height"></div>
+
     <div class="dock-tabs-bar">
       <div class="dock-tabs-group" role="tablist">
-        <button class="dock-tab-btn active" data-tab="metrics" role="tab">Metrics table</button>
-        <button class="dock-tab-btn" data-tab="log" role="tab">Operation log</button>
-        <button class="dock-tab-btn" data-tab="lab" role="tab">Lab report &amp; code</button>
+        <button class="dock-tab-btn active" data-tab="metrics" role="tab">Simulation Metrics</button>
+        <button class="dock-tab-btn" data-tab="log" role="tab">Event Log</button>
+        <button class="dock-tab-btn" data-tab="lab" role="tab">Algorithm Reference &amp; C Code</button>
       </div>
 
-      <div class="dock-tools-group">
-        <button class="btn-pill" id="btnExportSVG" title="Export Gantt Chart as SVG">Export SVG</button>
-        <button class="btn-pill" id="btnExportCSV" title="Export Metrics as CSV">Export CSV</button>
+      <div class="dock-size-controls">
+        <button class="btn-dock-size" id="btnDockCompact" title="Compact size">Small</button>
+        <button class="btn-dock-size" id="btnDockDefault" title="Standard size">Normal</button>
+        <button class="btn-dock-size" id="btnDockExpand" title="Expand size">Large</button>
+        <button class="btn-action" id="btnExportSVG" style="height: 24px; padding: 0 7px; margin-left: 6px;">Export SVG</button>
+        <button class="btn-action" id="btnExportCSV" style="height: 24px; padding: 0 7px;">Export CSV</button>
       </div>
     </div>
 
     <div class="dock-content">
-      <!-- Tab 1: Metrics -->
+      <!-- Tab 1: Simulation Metrics -->
       <div id="tabContentMetrics" class="tab-pane">
         <table class="metrics-grid-table" id="metricsTable">
           <thead>
@@ -1779,15 +1765,15 @@
 
         <div class="summary-metrics-bar">
           <div class="metric-card">
-            <div class="metric-label">Avg turnaround time</div>
+            <div class="metric-label">Avg Turnaround Time</div>
             <div class="metric-val" id="avgTatVal">0.00</div>
           </div>
           <div class="metric-card">
-            <div class="metric-label">Avg waiting time</div>
+            <div class="metric-label">Avg Waiting Time</div>
             <div class="metric-val" id="avgWtVal">0.00</div>
           </div>
           <div class="metric-card">
-            <div class="metric-label">CPU utilization</div>
+            <div class="metric-label">CPU Utilization</div>
             <div class="metric-val" id="cpuUtilVal">0.0%</div>
           </div>
           <div class="metric-card">
@@ -1795,13 +1781,13 @@
             <div class="metric-val" id="throughputVal">0.00 P/T</div>
           </div>
           <div class="metric-card">
-            <div class="metric-label">Context switches</div>
+            <div class="metric-label">Context Switches</div>
             <div class="metric-val" id="contextSwitchesVal">0</div>
           </div>
         </div>
       </div>
 
-      <!-- Tab 2: Operation Log -->
+      <!-- Tab 2: Event Log -->
       <div id="tabContentLog" class="tab-pane" style="display: none;">
         <div class="log-controls">
           <div class="log-filter-group" id="logFilterGroup">
@@ -1813,7 +1799,7 @@
           </div>
           <div style="display: flex; gap: 8px; align-items: center;">
             <input type="text" id="logSearch" class="log-search-input" placeholder="Filter log text...">
-            <button class="btn-pill" id="btnCopyLog">Copy log</button>
+            <button class="btn-action" id="btnCopyLog" style="height: 24px; padding: 0 8px;">Copy Log</button>
           </div>
         </div>
         <div class="log-stream" id="logStream">
@@ -1821,7 +1807,7 @@
         </div>
       </div>
 
-      <!-- Tab 3: Lab Report & Code -->
+      <!-- Tab 3: Algorithm Reference & C Code -->
       <div id="tabContentLab" class="tab-pane" style="display: none;">
         <div class="lab-report-wrap" id="labReportContent">
           <!-- Dynamically populated based on algorithm -->
@@ -1830,7 +1816,7 @@
     </div>
   </footer>
 
-  <!-- Status Bar (Very Bottom) -->
+  <!-- Status Bar -->
   <div class="status-bar" role="status">
     <div class="status-items">
       <span>Tick: <span id="statusTick" class="status-val">000</span></span>
@@ -1847,7 +1833,7 @@
   </div>
 </div>
 
-<!-- Command Palette Modal (Ctrl+K) -->
+<!-- Command Palette Modal -->
 <div class="modal-backdrop" id="commandModal" role="dialog" aria-modal="true" aria-label="Command Palette">
   <div class="command-palette">
     <div class="cp-input-wrap">
@@ -1856,7 +1842,7 @@
       <span class="cp-item-kbd">Esc to exit</span>
     </div>
     <div class="cp-results" id="cpResults">
-      <!-- Dynamic filtered command items -->
+      <!-- Filtered commands -->
     </div>
   </div>
 </div>
@@ -1868,7 +1854,6 @@
 (function() {
   'use strict';
 
-  // Process 6-Step Analogous Ramp
   const PROCESS_COLORS = [
     '#00f0ff', // P1
     '#00bbf9', // P2
@@ -1884,7 +1869,6 @@
     return PROCESS_COLORS[(num - 1) % PROCESS_COLORS.length];
   }
 
-  // Workload Presets
   const PRESETS = {
     standard: [
       { id: 'P1', at: 0, bt: 5 },
@@ -1921,7 +1905,6 @@
     return list;
   }
 
-  // Simulator State
   let state = {
     algo: 'FCFS',
     quantum: 2,
@@ -2155,7 +2138,6 @@
 
       logs.push(...tickLogs);
 
-      // Snapshot state
       snapshots.push({
         tick: tick + 1,
         runningPid: running ? running.id : (activePid === 'IDLE' ? 'IDLE' : activePid),
@@ -2175,7 +2157,6 @@
       tick++;
     }
 
-    // Initial tick 0 snapshot
     snapshots.unshift({
       tick: 0,
       runningPid: 'IDLE',
@@ -2394,7 +2375,12 @@
     commandModal: document.getElementById('commandModal'),
     cpSearch: document.getElementById('cpSearch'),
     cpResults: document.getElementById('cpResults'),
-    stageContainer: document.getElementById('stageContainer')
+    stageContainer: document.getElementById('stageContainer'),
+    bottomDock: document.getElementById('bottomDock'),
+    dockResizer: document.getElementById('dockResizer'),
+    btnDockCompact: document.getElementById('btnDockCompact'),
+    btnDockDefault: document.getElementById('btnDockDefault'),
+    btnDockExpand: document.getElementById('btnDockExpand')
   };
 
   // Render Process Table
@@ -2478,9 +2464,9 @@
     const h = particleCanvas.height;
     particles.push({
       x: w * 0.72,
-      y: h * 0.25 + (Math.random() - 0.5) * 30,
+      y: h * 0.22 + (Math.random() - 0.5) * 30,
       targetX: w * 0.28,
-      targetY: h * 0.25 + (Math.random() - 0.5) * 20,
+      targetY: h * 0.22 + (Math.random() - 0.5) * 20,
       progress: 0,
       speed: (0.015 + Math.random() * 0.01) * state.speed,
       color: color || '#00d2ff',
@@ -2603,10 +2589,10 @@
       const isSelected = state.algo === a;
 
       bCtx.font = '10px ui-monospace, monospace';
-      bCtx.fillStyle = isSelected ? (state.theme === 'light' ? '#0284c7' : '#00d2ff') : (state.theme === 'light' ? '#64748b' : '#8795ab');
+      bCtx.fillStyle = isSelected ? (state.theme === 'light' ? '#0284c7' : '#00d2ff') : (state.theme === 'light' ? '#64748b' : '#8897ad');
       bCtx.fillText(a, 4, y + 7);
 
-      bCtx.fillStyle = isSelected ? (state.theme === 'light' ? '#0284c7' : '#00d2ff') : (state.theme === 'light' ? '#cbd5e1' : '#242c3d');
+      bCtx.fillStyle = isSelected ? (state.theme === 'light' ? '#0284c7' : '#00d2ff') : (state.theme === 'light' ? '#cbd5e1' : '#232c3d');
       bCtx.fillRect(45, y, barW, barHeight);
 
       bCtx.fillStyle = isSelected ? (state.theme === 'light' ? '#0284c7' : '#ffffff') : (state.theme === 'light' ? '#475569' : '#64748b');
@@ -2652,7 +2638,7 @@
     if (state.algo === 'MLFQ') {
       el.normalQueueStage.style.display = 'none';
       el.mlfqContainer.style.display = 'flex';
-      el.queueCardTitle.textContent = 'MLFQ priority lanes';
+      el.queueCardTitle.textContent = 'MLFQ Priority Lanes';
 
       const renderTokens = (container, list) => {
         container.innerHTML = '';
@@ -2678,7 +2664,7 @@
     } else {
       el.normalQueueStage.style.display = 'flex';
       el.mlfqContainer.style.display = 'none';
-      el.queueCardTitle.textContent = 'Ready queue // Z-Stack';
+      el.queueCardTitle.textContent = 'Ready Queue';
 
       el.queue3dCards.innerHTML = '';
       const q = snap.readyQueue;
@@ -2735,13 +2721,12 @@
       const w = dur * pixelsPerTick;
       bDiv.style.width = w + 'px';
 
-      // Height proportional to burst/duration in 3D mode
       const procRef = state.processes.find(p => p.id === block.pid);
       const burst = procRef ? procRef.bt : dur;
       const blockHeight = state.is3D ? Math.min(84, 34 + burst * 5) : 48;
       bDiv.style.height = blockHeight + 'px';
 
-      const color = block.pid === 'IDLE' ? (state.theme === 'light' ? '#94a3b8' : '#333d4d') : getProcColor(block.pid);
+      const color = block.pid === 'IDLE' ? (state.theme === 'light' ? '#94a3b8' : '#333f52') : getProcColor(block.pid);
       bDiv.style.setProperty('--block-color', color);
 
       bDiv.innerHTML = `
@@ -3327,12 +3312,12 @@ int main() {
 
     el.labReportContent.innerHTML = `
       <div>
-        <div class="lab-section-title">01. Experiment aim &amp; objective</div>
+        <div class="lab-section-title">01. Experiment Aim &amp; Objective</div>
         <div class="lab-text">${data.aim}</div>
       </div>
 
       <div>
-        <div class="lab-section-title">02. Formal pseudo-code specification</div>
+        <div class="lab-section-title">02. Formal Pseudo-Code Specification</div>
         <div class="code-block-wrap">
           <pre class="code-content">${escapeHtml(data.pseudo)}</pre>
         </div>
@@ -3340,8 +3325,8 @@ int main() {
 
       <div>
         <div class="lab-section-title">
-          <span>03. Verified standalone C reference code</span>
-          <button class="btn-pill" id="btnCopyCCode" style="padding:2px 8px;">Copy C code</button>
+          <span>03. Verified Standalone C Reference Code</span>
+          <button class="btn-action" id="btnCopyCCode" style="height:22px; padding:0 8px;">Copy C Code</button>
         </div>
         <div class="code-block-wrap">
           <pre class="code-content" id="cCodeContainer">${syntaxHighlightC(data.cCode)}</pre>
@@ -3349,16 +3334,16 @@ int main() {
       </div>
 
       <div>
-        <div class="lab-section-title">04. Experimental run data (matching simulator)</div>
+        <div class="lab-section-title">04. Experimental Run Data (Live Synchronized)</div>
         <div class="lab-text">Simulation results dynamically synchronized with current workload parameters:</div>
         ${outputTableHtml}
         <div style="font-family: var(--font-mono); font-size:11px; margin-top:6px; color:var(--accent);">
-          Average turnaround time = ${(totTat / n).toFixed(2)} | Average waiting time = ${(totWt / n).toFixed(2)}
+          Average Turnaround Time = ${(totTat / n).toFixed(2)} | Average Waiting Time = ${(totWt / n).toFixed(2)}
         </div>
       </div>
 
       <div>
-        <div class="lab-section-title">05. Viva &amp; technical interview FAQ</div>
+        <div class="lab-section-title">05. Viva &amp; Technical Interview FAQ</div>
         <div class="faq-accordion">
           ${data.faqs.map(f => `
             <div class="faq-item">
@@ -3378,7 +3363,7 @@ int main() {
       copyBtn.addEventListener('click', () => {
         navigator.clipboard.writeText(data.cCode).then(() => {
           copyBtn.textContent = 'Copied!';
-          setTimeout(() => { copyBtn.textContent = 'Copy C code'; }, 1500);
+          setTimeout(() => { copyBtn.textContent = 'Copy C Code'; }, 1500);
         });
       });
     }
@@ -3419,7 +3404,7 @@ int main() {
     const svgW = Math.max(500, totalTicks * pxPerTick + 60);
     const svgH = 140;
 
-    let svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}" style="background:#0c0e14; font-family: monospace;">`;
+    let svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}" style="background:#0a0d14; font-family: monospace;">`;
     svg += `<text x="20" y="24" fill="#00d2ff" font-size="12" font-weight="bold">CPU SCHEDULE GANTT // ALGORITHM: ${state.algo}</text>`;
 
     let x = 20;
@@ -3428,15 +3413,15 @@ int main() {
     snap.gantt.forEach(block => {
       const dur = block.end - block.start;
       const w = dur * pxPerTick;
-      const col = block.pid === 'IDLE' ? '#333d4d' : getProcColor(block.pid);
+      const col = block.pid === 'IDLE' ? '#333f52' : getProcColor(block.pid);
 
-      svg += `<rect x="${x}" y="${y}" width="${w}" height="${blockH}" fill="${col}" stroke="#181d29" stroke-width="1" rx="2" />`;
+      svg += `<rect x="${x}" y="${y}" width="${w}" height="${blockH}" fill="${col}" stroke="#171d2b" stroke-width="1" rx="2" />`;
       svg += `<text x="${x + w / 2}" y="${y + 24}" fill="#ffffff" font-size="11" font-weight="bold" text-anchor="middle">${block.pid}</text>`;
-      svg += `<text x="${x}" y="${y + blockH + 16}" fill="#8795ab" font-size="10">${block.start}</text>`;
+      svg += `<text x="${x}" y="${y + blockH + 16}" fill="#8897ad" font-size="10">${block.start}</text>`;
       x += w;
     });
 
-    svg += `<text x="${x}" y="${y + blockH + 16}" fill="#8795ab" font-size="10">${totalTicks}</text>`;
+    svg += `<text x="${x}" y="${y + blockH + 16}" fill="#8897ad" font-size="10">${totalTicks}</text>`;
     svg += `</svg>`;
 
     const blob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
@@ -3476,7 +3461,7 @@ int main() {
     URL.revokeObjectURL(url);
   }
 
-  // Command Palette Engine
+  // Command Palette
   const COMMANDS = [
     { label: 'Set Algorithm: FCFS', action: () => setAlgo('FCFS'), kbd: 'ALGO' },
     { label: 'Set Algorithm: SJF (Non-preemptive)', action: () => setAlgo('SJF'), kbd: 'ALGO' },
@@ -3540,7 +3525,7 @@ int main() {
   // State Mutations
   function setAlgo(newAlgo) {
     state.algo = newAlgo;
-    el.algoTabs.querySelectorAll('.algo-btn').forEach(btn => {
+    el.algoTabs.querySelectorAll('.algo-tab-btn').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.algo === newAlgo);
     });
 
@@ -3584,8 +3569,7 @@ int main() {
   function toggle3D() {
     state.is3D = !state.is3D;
     el.ganttTrack.classList.toggle('mode-isometric', state.is3D);
-    el.btnToggle3D.textContent = state.is3D ? '3D' : '2D';
-    el.btnToggle3D.classList.toggle('active', state.is3D);
+    el.btnToggle3D.textContent = state.is3D ? '3D View' : '2D Flat';
     el.statusView.textContent = state.is3D ? '3D' : '2D';
     renderTick();
   }
@@ -3597,10 +3581,60 @@ int main() {
     renderTick();
   }
 
+  // --- DRAGGABLE & ADJUSTABLE DOCK HEIGHT RESIZING ---
+  let isDraggingDock = false;
+  let startDragY = 0;
+  let startDockHeight = 290;
+
+  el.dockResizer.addEventListener('mousedown', e => {
+    isDraggingDock = true;
+    startDragY = e.clientY;
+    startDockHeight = el.bottomDock.offsetHeight;
+    el.dockResizer.classList.add('dragging');
+    document.body.style.cursor = 'row-resize';
+    document.body.style.userSelect = 'none';
+  });
+
+  window.addEventListener('mousemove', e => {
+    if (!isDraggingDock) return;
+    const deltaY = startDragY - e.clientY;
+    const newHeight = Math.max(140, Math.min(window.innerHeight * 0.75, startDockHeight + deltaY));
+    el.bottomDock.style.height = newHeight + 'px';
+  });
+
+  window.addEventListener('mouseup', () => {
+    if (isDraggingDock) {
+      isDraggingDock = false;
+      el.dockResizer.classList.remove('dragging');
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+      resizeParticleCanvas();
+      renderLiveCharts();
+    }
+  });
+
+  // Dock Preset Height Buttons
+  el.btnDockCompact.addEventListener('click', () => {
+    el.bottomDock.style.height = '180px';
+    resizeParticleCanvas();
+    renderLiveCharts();
+  });
+  el.btnDockDefault.addEventListener('click', () => {
+    el.bottomDock.style.height = '290px';
+    resizeParticleCanvas();
+    renderLiveCharts();
+  });
+  el.btnDockExpand.addEventListener('click', () => {
+    el.bottomDock.style.height = '440px';
+    resizeParticleCanvas();
+    renderLiveCharts();
+  });
+
   // Event Listeners
   el.algoTabs.addEventListener('click', e => {
-    if (e.target.classList.contains('algo-btn')) {
-      setAlgo(e.target.dataset.algo);
+    const btn = e.target.closest('.algo-tab-btn');
+    if (btn) {
+      setAlgo(btn.dataset.algo);
     }
   });
 
@@ -3711,7 +3745,7 @@ int main() {
     const text = snap.logs.map(l => `[Tick ${String(l.tick).padStart(3, '0')}] [${l.type}] ${l.msg}`).join('\n');
     navigator.clipboard.writeText(text).then(() => {
       el.btnCopyLog.textContent = 'Copied!';
-      setTimeout(() => { el.btnCopyLog.textContent = 'Copy log'; }, 1500);
+      setTimeout(() => { el.btnCopyLog.textContent = 'Copy Log'; }, 1500);
     });
   });
 
